@@ -1,6 +1,6 @@
 #include <assert.h>
 
-bool check_bpm(flaot bpm)
+bool check_bpm(float bpm)
 {
 if (bpm<70||bpm>150)
 {
