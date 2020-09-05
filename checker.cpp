@@ -1,3 +1,4 @@
+
 #include <iostream>
 #include <assert.h>
 #include <string.h>
@@ -54,7 +55,7 @@ private:
 
 public:
     VitalCheck();
-    VitalCheck(const char*, const char*, float, float, float, AlertInterface* alert);
+    VitalCheck(const char* patientname, const char* name, float value, float lower_limt, float upper_limit, AlertInterface* alert);
     
     void CheckLevel();
     bool IsLevelOk();
@@ -77,7 +78,8 @@ void VitalCheck::CheckLevel()
 }
 bool VitalCheck::IsLevelOk()
 {
-    if ( Level != "OK")
+    string ok = "OK";
+    if ( Level != ok)
     {
         Alert->raiseAlert(PatientName,Name, Level);
         return false;
@@ -128,71 +130,15 @@ PatientVitals::PatientVitals(const char* patientname,string age_group,float Bpm,
 int main()
 {
 
-   AlertInterface *alert_sms, *alert_sound;
+   AlertInterface *alertsms, *alertsound;
    AlertWithSMS alert1;
    AlertWithSound alert2;
-   alert_sms = &alert1;
-   alert_sound = &alert2;
-
-   PatientVitals("Rahul","Adult",60, 80, 20, alert_sms);
-   PatientVitals("Eshaan","Kid",160, 180, 120, alert_sound);
-   PatientVitals("Basheer","SeniorCitizen",80, 95, 25, alert_sms);
+   alertsms = &alert1;
+   alertsound = &alert2;
+   PatientVitals("Rahul","Adult",60, 80, 20, alertsms);
+   PatientVitals("Eshaan","Kid",160, 180, 120, alertsound);
+   PatientVitals("Basheer","SeniorCitizen",80, 95, 25, alertsms);
     
     
     
-}
-
-      soundAlerter.raiseAlert(vitalName, level);
-    }
-};
-
-class RangeChecker
-{
-  private:
-    int lower;
-    int upper;
-    const char* vitalName;
-    AlertInterface* alerter;
-  public:
-    RangeChecker(const char* name, int low, int up, AlertInterface* alerterPtr)
-    {
-      vitalName = name;
-      lower = low;
-      upper = up;
-      alerter = alerterPtr;
-    }
-    void checkAgainstRange(float value)
-    {
-      if(value < lower) {
-        alerter->raiseAlert(vitalName, "too low");  //'when'
-      } else if(value > upper) {
-        alerter->raiseAlert(vitalName, "too high");
-      }
-    }
-};
-
-class VitalsIntegrator
-{
-  private:
-    RangeChecker bpmChecker, spo2Checker, respChecker;
-  public:
-    VitalsIntegrator(AlertInterface* alertPtr): 
-      bpmChecker("pulse rate", 70, 150, alertPtr),
-      spo2Checker("spo2", 90, 101, alertPtr),
-      respChecker("resp rate", 30, 95, alertPtr)
-    {}
-    void checkAllVitals(float bpm, float spo2, float respRate)
-    {
-      bpmChecker.checkAgainstRange(bpm);
-      spo2Checker.checkAgainstRange(spo2);
-      respChecker.checkAgainstRange(respRate);
-    }
-};
-
-int main() {
-  AlertIntegrator alerter;  
-  VitalsIntegrator vitals(&alerter);
-
-  vitals.checkAllVitals(80, 95, 60);
-  vitals.checkAllVitals(60, 90, 40);
 }
